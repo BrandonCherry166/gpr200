@@ -7,29 +7,43 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+#include "..\core\brandon\shader.h"
+
 const int SCREEN_WIDTH = 1080;
 const int SCREEN_HEIGHT = 720;
 
 float vertices[] = {
-		-0.5f, -0.5f, 0.0f,
-		0.5f,-0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f
+		//Positions			//Colors
+		-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+		0.5f,-0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f
 };
 
 const char* vertexShaderSource = R"(#version 330 core
 		layout (location = 0) in vec3 aPos;
+		layout (location = 1) in vec4 aColor; 
+
+		out vec4 ourColor;
+		uniform float uTime;
 		void main()
 		{
-			gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+			vec3 pos = aPos;
+			pos.y += sin(uTime * pos.x) / 4.0;
+			
+			gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);
+			ourColor = aColor;
+
 		}
 	)";
 
 const char* fragmentShaderSource = R"(#version 330 core
 		out vec4 FragColor;
-		
+		in vec4 ourColor;
+		uniform float uTime;
+		uniform vec4 uColor = vec4(1.0);
 		void main()
 		{
-			FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+			FragColor = ourColor *(sin(uTime) * 0.5 + 0.5);
 		}
 	)";
 
@@ -112,21 +126,44 @@ int main() {
 	glUseProgram(shaderProgram);
 	
 
-	//Linking Vertex Attributes
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	//Linking Vertex Attributes - Position
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	//Color Attributes
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	
 
 	//Render loop
 	while (!glfwWindowShouldClose(window)) {
+	
 		glfwPollEvents();
-		//Clear framebuffer
-		glClearColor(0.3f, 0.4f, 0.9f, 1.0f);
+		float time = (float)glfwGetTime();
+		//Clear Colorbuffer
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glUseProgram(shaderProgram);
+
+		//Using Uniform for Color
+		float timeValue = glfwGetTime();
+		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+		int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+		glUseProgram(shaderProgram);
+
+		int timeLoc = glGetUniformLocation(shaderProgram, "uTime");
+		glUniform1f(timeLoc, time);
+
+		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+
+		//Render Triangle
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-		//Drawing happens here!
+
+		//Draw
 		glfwSwapBuffers(window);
+		
+		
 	}
 	printf("Shutting down...");
 }
