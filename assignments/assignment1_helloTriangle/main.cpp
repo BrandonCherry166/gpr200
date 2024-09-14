@@ -49,7 +49,7 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	Shader ourShader("../assets/vertexShader.vs", "../assets/fragmentShader.fs");
+	Shader ourShader("assets/vertexShader.vs", "assets/fragmentShader.fs");
 	//More Shader Programming
 	ourShader.use();
 	
