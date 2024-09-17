@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+#include "..\core\brandon\textureLoader.h"
 #include "..\core\brandon\shader.h"
 
 const int SCREEN_WIDTH = 1080;
@@ -22,6 +23,12 @@ float vertices[] = {
 unsigned int indices[] = {
 	0,1,3, //Triangle 1
 	1,2,3 //Triangle 2
+};
+
+float texCoords[] = {
+	0.0f, 0.0f, //lower left
+	1.0f, 0.0f, //lower right
+	0.5f, 1.0f //top center
 };
 
 int main() {
@@ -41,7 +48,7 @@ int main() {
 		return 1;
 	}
 	//Initialization goes here!
-
+	
 	//Vertex Array Object
 	unsigned int VAO;
 	glGenVertexArrays(1, &VAO);
