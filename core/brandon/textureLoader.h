@@ -8,5 +8,6 @@
 #include <GLFW/glfw3.h>
 
 
+
 unsigned int loadTexture2D(const char* filePath, int filterMode, int wrapMode);
 #endif
