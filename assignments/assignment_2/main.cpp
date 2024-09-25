@@ -15,21 +15,17 @@ const int SCREEN_HEIGHT = 720;
 
 float vertices[] = {
 		//Positions			//Colors
-		0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, //top right
-		0.5f,-0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, //bottom right
-		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, //bottom left
-		-0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f //top left
+		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
 };
 unsigned int indices[] = {
 	0,1,3, //Triangle 1
 	1,2,3 //Triangle 2
 };
 
-float texCoords[] = {
-	0.0f, 0.0f, //lower left
-	1.0f, 0.0f, //lower right
-	0.5f, 1.0f //top center
-};
+
 
 int main() {
 	printf("Initializing...");
@@ -70,14 +66,14 @@ int main() {
 	//More Shader Programming
 	ourShader.use();
 	
-	unsigned int texture = loadTexture2D("assets/texture.jpg", GL_LINEAR, GL_MIRRORED_REPEAT);
+	
 
 	//Linking Vertex Attributes - Position
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	//Color Attributes
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
 	
@@ -85,7 +81,11 @@ int main() {
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 	
+	unsigned int texture = loadTexture2D("assets/texture.jpg", GL_LINEAR, GL_MIRRORED_REPEAT, false);
+	unsigned int texture2 = loadTexture2D("assets/spriteTex.jpg", GL_NEAREST, GL_REPEAT, true);
 
+	ourShader.setInt("texture1", 0);
+	ourShader.setInt("texture2", 1);
 	//Render loop
 	while (!glfwWindowShouldClose(window)) {
 	
@@ -94,21 +94,26 @@ int main() {
 		//Clear Colorbuffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		//Textures
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
 		ourShader.use();
 		
 
 		//Using Uniform for Color
-		float timeValue = glfwGetTime();
-		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-		int vertexColorLocation = glGetUniformLocation(ourShader.ID, "ourColor");
+		//float timeValue = glfwGetTime();
+		//float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+		//int vertexColorLocation = glGetUniformLocation(ourShader.ID, "ourColor");
 		
 		ourShader.use();
 
-		int timeLoc = glGetUniformLocation(ourShader.ID, "uTime");
-		glUniform1f(timeLoc, time);
+		//int timeLoc = glGetUniformLocation(ourShader.ID, "uTime");
+		//glUniform1f(timeLoc, time);
 
-		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+		//glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 
 		//Render Triangle
 		

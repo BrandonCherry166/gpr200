@@ -1,12 +1,24 @@
-
+#define STB_IMAGE_IMPLEMENTATION
+#include "..\ew\external\stb_image.h" //Include stbi
+#include <string>
+#include <iostream>
 #include "textureLoader.h"
-#include <GLFW/glfw3.h>
 #include "..\ew\external\glad.h"
 
-unsigned int loadTexture2D(const char* filePath, int filterMode, int wrapMode)
+unsigned int loadTexture2D(const char* filePath, int filterMode, int wrapMode, bool flipIt)
 {
-	unsigned int texture1, texture2;
+	unsigned int texture1;
 	int width, height, nrChannels;
+
+	if (flipIt)
+	{
+		stbi_set_flip_vertically_on_load(true);
+	}
+	else
+	{
+		stbi_set_flip_vertically_on_load(false);
+	}
+	
 	//texture 1
 	glGenTextures(1, &texture1);
 	glBindTexture(GL_TEXTURE_2D, texture1);
@@ -31,4 +43,5 @@ unsigned int loadTexture2D(const char* filePath, int filterMode, int wrapMode)
 	}
 	stbi_image_free(data);
 
+	return texture1;
 }

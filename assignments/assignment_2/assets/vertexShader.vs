@@ -9,9 +9,7 @@ out vec2 TexCoord;
 uniform float uTime;
 void main()
 {
-vec3 pos = aPos;	
-gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);
+gl_Position = vec4(aPos, 1.0);
 ourColor = aColor;
-TexCoord = aTexCoord;
-
+TexCoord = vec2(aTexCoord.x, aTexCoord.y);
 }
