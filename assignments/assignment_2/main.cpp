@@ -82,8 +82,8 @@ int main() {
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 	
-	unsigned int texture = loadTexture2D("assets/texture.jpg", GL_LINEAR, GL_MIRRORED_REPEAT, false);
-	unsigned int texture2 = loadTexture2D("assets/spriteTex.jpg", GL_NEAREST, GL_REPEAT, true);
+	unsigned int texture = loadTexture2D("assets/texture.png", GL_LINEAR, GL_MIRRORED_REPEAT, false);
+	unsigned int texture2 = loadTexture2D("assets/newSprite.png", GL_NEAREST, GL_CLAMP_TO_EDGE, true);
 
 	ourShader.setInt("texture1", 1);
 	spriteShader.setInt("texture1", 1);
