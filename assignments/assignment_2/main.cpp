@@ -62,12 +62,13 @@ int main() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	Shader ourShader("assets/vertexShader.vs", "assets/fragmentShader.fs");
-	//More Shader Programming
-	ourShader.use();
-	
-	
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	Shader ourShader("assets/vertexShader.vs", "assets/fragmentShader.fs");
+	Shader spriteShader("assets/spriteVertexShader.vs", "assets/spriteFragmentShader.fs");
+
+	
 	//Linking Vertex Attributes - Position
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -84,8 +85,8 @@ int main() {
 	unsigned int texture = loadTexture2D("assets/texture.jpg", GL_LINEAR, GL_MIRRORED_REPEAT, false);
 	unsigned int texture2 = loadTexture2D("assets/spriteTex.jpg", GL_NEAREST, GL_REPEAT, true);
 
-	ourShader.setInt("texture1", 0);
-	ourShader.setInt("texture2", 1);
+	ourShader.setInt("texture1", 1);
+	spriteShader.setInt("texture1", 1);
 	//Render loop
 	while (!glfwWindowShouldClose(window)) {
 	
@@ -98,29 +99,24 @@ int main() {
 		//Textures
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texture2);
-		ourShader.use();
-		
-
-		//Using Uniform for Color
-		//float timeValue = glfwGetTime();
-		//float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-		//int vertexColorLocation = glGetUniformLocation(ourShader.ID, "ourColor");
+	
 		
 		ourShader.use();
-
-		//int timeLoc = glGetUniformLocation(ourShader.ID, "uTime");
-		//glUniform1f(timeLoc, time);
-
-		//glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
-
-		//Render Triangle
 		
+
 		glBindVertexArray(VAO);
-
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		spriteShader.use();
+
+		//Time Stuff
+		float timeValue = glfwGetTime();
+		int timeLoc = glGetUniformLocation(spriteShader.ID, "uTime");
+		glUniform1f(timeLoc, time);
+		glBindTexture(GL_TEXTURE_2D, texture2);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
 
 		//Draw
 		glfwSwapBuffers(window);
