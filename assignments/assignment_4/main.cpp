@@ -13,9 +13,21 @@
 
 #include "..\core\brandon\textureLoader.h"
 #include "..\core\brandon\shader.h"
+#include "..\core\brandon\camera.h"
 
 const int SCREEN_WIDTH = 1080;
 const int SCREEN_HEIGHT = 720;
+void processInput(GLFWwindow* window);
+
+
+//Camera
+Camera cam(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX = SCREEN_WIDTH / 2.0f;
+float lastY = SCREEN_HEIGHT / 2.0f;
+bool firstMouse = true;
+
+float deltaTime = 0.0f; //Time between first and last frame
+float lastFrame = 0.0f;
 
 float vertices[] = {
 	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -65,7 +77,32 @@ unsigned int indices[] = {
 	1,2,3 //Triangle 2
 };
 
+// glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f))
 
+glm::vec3 cubePositions[] = {
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
+};
+
+float randomRotation = ew::RandomRange(-90.0f, 90.0f);
 
 int main() {
 	printf("Initializing...");
@@ -122,6 +159,12 @@ int main() {
 	while (!glfwWindowShouldClose(window)) {
 	
 		glfwPollEvents();
+
+		float currentFrame = static_cast<float>(glfwGetTime());
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		processInput(window);
 		
 		//Clear Colorbuffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -134,29 +177,59 @@ int main() {
 
 		ourShader.use();
 
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-
 		glm::mat4 view = glm::mat4(1.0f);
 		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
 		glm::mat4 projection = glm::mat4(1.0f);
 		projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 
-		unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
+		
 		unsigned int viewLoc = glGetUniformLocation(ourShader.ID, "view");
 		unsigned int projectionLoc = glGetUniformLocation(ourShader.ID, "projection");
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
 		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, &projection[0][0]);
 		
 		glBindVertexArray(VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		for (unsigned int i = 0; i < 20; i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = randomRotation * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
+			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+		
 		//Draw
 		glfwSwapBuffers(window);
 		
 		
 	}
 	printf("Shutting down...");
+}
+void processInput(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		cam.ProcessKeyboard(FORWARD, deltaTime);
+		std::cout << "Input!";
+	}
+		
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		cam.ProcessKeyboard(BACKWARD, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		cam.ProcessKeyboard(LEFT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		cam.ProcessKeyboard(RIGHT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+		cam.ProcessKeyboard(STRAFE_LEFT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+		cam.ProcessKeyboard(STRAFE_RIGHT, deltaTime);
 }
