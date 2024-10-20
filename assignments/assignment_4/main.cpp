@@ -18,6 +18,8 @@
 const int SCREEN_WIDTH = 1080;
 const int SCREEN_HEIGHT = 720;
 void processInput(GLFWwindow* window);
+void mouse_callback(GLFWwindow* window, double xPos, double yPos);
+void scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
 
 
 //Camera
@@ -120,6 +122,8 @@ int main() {
 		printf("GLAD Failed to load GL headers");
 		return 1;
 	}
+	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetScrollCallback(window, scroll_callback);
 	//Initialization goes here!
 	glEnable(GL_DEPTH_TEST);
 	//Vertex Array Object
@@ -159,7 +163,6 @@ int main() {
 	while (!glfwWindowShouldClose(window)) {
 	
 		glfwPollEvents();
-
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
@@ -177,11 +180,9 @@ int main() {
 
 		ourShader.use();
 
-		glm::mat4 view = glm::mat4(1.0f);
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		glm::mat4 view = cam.GetViewMatrix();
 
-		glm::mat4 projection = glm::mat4(1.0f);
-		projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(cam.zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 
 		
 		unsigned int viewLoc = glGetUniformLocation(ourShader.ID, "view");
@@ -219,7 +220,6 @@ void processInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		cam.ProcessKeyboard(FORWARD, deltaTime);
-		std::cout << "Input!";
 	}
 		
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -232,4 +232,26 @@ void processInput(GLFWwindow* window)
 		cam.ProcessKeyboard(STRAFE_LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
 		cam.ProcessKeyboard(STRAFE_RIGHT, deltaTime);
+}
+void mouse_callback(GLFWwindow* window, double xPos, double yPos)
+{
+	float xPosf = static_cast<float>(xPos);
+	float yPosf = static_cast<float>(yPos);
+
+	if (firstMouse)
+	{
+		lastX = xPosf;
+		lastY = yPosf;
+		firstMouse = false;
+	}
+
+	float xOffset = xPosf - lastX;
+	float yOffset = lastY  - yPosf;
+
+	cam.ProcessMouseInput(xOffset, yOffset);
+}
+
+void scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
+{
+	cam.processScroll(static_cast<float>(yOffset));
 }
