@@ -248,6 +248,9 @@ void mouse_callback(GLFWwindow* window, double xPos, double yPos)
 	float xOffset = xPosf - lastX;
 	float yOffset = lastY  - yPosf;
 
+	lastX = xPosf;
+	lastY = yPosf;
+
 	cam.ProcessMouseInput(xOffset, yOffset);
 }
 
