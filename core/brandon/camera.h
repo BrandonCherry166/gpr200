@@ -11,15 +11,15 @@ enum Camera_Movement
 	BACKWARD,
 	LEFT,
 	RIGHT,
-	STRAFE_LEFT,
-	STRAFE_RIGHT
+	STRAFE_UP,
+	STRAFE_DOWN
 };
 
 //Defaults
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
 const float SPEED = 2.5f;
-const float SENSITIVITY = 0.01f;
+const float SENSITIVITY = 0.1f;
 const float ZOOM = 45.0f;
 
 
@@ -62,9 +62,14 @@ struct Camera
 		return glm::lookAt(cameraPos, cameraPos + front, up);
 	}
 
-	void ProcessKeyboard(Camera_Movement direction, float deltaTime) //Handles WSAD+QE
+	void ProcessKeyboard(Camera_Movement direction, float deltaTime, bool isSprinting) //Handles WSAD+QE and Sprint
 	{
 		float velocity = movementSpeed * deltaTime;
+
+		if (isSprinting)
+		{
+			velocity *= 2;
+		}
 		switch (direction)
 		{
 		case FORWARD:
@@ -79,13 +84,11 @@ struct Camera
 		case LEFT:
 			cameraPos -= right * velocity;
 			break;
-		case STRAFE_LEFT:
-			cameraPos += front * velocity;
-			cameraPos -= right * velocity;
+		case STRAFE_UP:
+			cameraPos += up * velocity;
 			break;
-		case STRAFE_RIGHT:
-			cameraPos += front * velocity;
-			cameraPos += right * velocity;
+		case STRAFE_DOWN:
+			cameraPos -= up * velocity;
 			break;
 		}
 	}

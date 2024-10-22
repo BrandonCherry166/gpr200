@@ -217,21 +217,27 @@ void processInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
+	bool sprint = false;
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))
+	{
+		sprint = true;
+	}
+
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		cam.ProcessKeyboard(FORWARD, deltaTime);
+		cam.ProcessKeyboard(FORWARD, deltaTime, sprint);
 	}
 		
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cam.ProcessKeyboard(BACKWARD, deltaTime);
+		cam.ProcessKeyboard(BACKWARD, deltaTime, sprint);
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		cam.ProcessKeyboard(LEFT, deltaTime);
+		cam.ProcessKeyboard(LEFT, deltaTime, sprint);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		cam.ProcessKeyboard(RIGHT, deltaTime);
+		cam.ProcessKeyboard(RIGHT, deltaTime, sprint);
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-		cam.ProcessKeyboard(STRAFE_LEFT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-		cam.ProcessKeyboard(STRAFE_RIGHT, deltaTime);
+		cam.ProcessKeyboard(STRAFE_UP, deltaTime, sprint);
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS, sprint)
+		cam.ProcessKeyboard(STRAFE_DOWN, deltaTime, sprint);
 }
 void mouse_callback(GLFWwindow* window, double xPos, double yPos)
 {
