@@ -236,7 +236,7 @@ void processInput(GLFWwindow* window)
 		cam.ProcessKeyboard(RIGHT, deltaTime, sprint);
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 		cam.ProcessKeyboard(STRAFE_UP, deltaTime, sprint);
-	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS, sprint)
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
 		cam.ProcessKeyboard(STRAFE_DOWN, deltaTime, sprint);
 }
 void mouse_callback(GLFWwindow* window, double xPos, double yPos)
