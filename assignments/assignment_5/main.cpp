@@ -31,51 +31,48 @@ bool firstMouse = true;
 float deltaTime = 0.0f; //Time between first and last frame
 float lastFrame = 0.0f;
 
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3 lightPos(1.2f, 1.0f, -8.0f);
 
 float vertices[] = {
-	  -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	   0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	   0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	   0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	  -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	  -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-
-	  -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-	   0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-	   0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-	   0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-	  -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-	  -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-
-	  -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-	  -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	  -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	  -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	  -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-	  -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-
-	   0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-	   0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	   0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	   0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	   0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-	   0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-
-	  -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-	   0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-	   0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	   0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	  -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	  -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-
-	  -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-	   0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-	   0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	   0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	  -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	  -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 0.0f, -1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f, 0.0f, -1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f, -1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 0.0f, -1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, -1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f,  0.0f
 };
+
+
 
 glm::vec3 cubePositions[] = {
 	glm::vec3(ew::RandomRange(-4.0f, 4.0f), ew::RandomRange(-3.0f, 5.0f), ew::RandomRange(-15.0f, 0.0f)),
@@ -136,16 +133,11 @@ int main() {
 	Shader ourShader("assets/vertexShader.vs", "assets/fragmentShader.fs");
 	Shader lightCubeShader("assets/lighting.vs", "assets/lighting.fs");
 
-	//Linking Vertex Attributes - Position
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0); // Positions
 	glEnableVertexAttribArray(0);
-
-	//Texture Attributes
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))); // Texture Coords
 	glEnableVertexAttribArray(1);
-
-	//Normal
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float))); // Normals
 	glEnableVertexAttribArray(2);
 
 	unsigned int lightCubeVAO;
@@ -154,7 +146,7 @@ int main() {
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	// note that we update the lamp's position attribute's stride to reflect the updated buffer data
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	
 	unsigned int texture = loadTexture2D("assets/texture.png", GL_LINEAR, GL_MIRRORED_REPEAT, false);
@@ -195,7 +187,7 @@ int main() {
 		{
 			model = glm::mat4(1.0f);
 			model = glm::translate(model, cubePositions[i]);
-			float angle = randomRotation * i;
+			float angle = randomRotation * (i + 1); 
 			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 			unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
 			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));

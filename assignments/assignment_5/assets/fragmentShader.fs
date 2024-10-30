@@ -8,7 +8,6 @@ in vec3 Normal;
 
 // texture samplers
 uniform sampler2D texture1;
-uniform sampler2D texture2;
 
 uniform vec3 lightColor;
 uniform vec3 lightPos;
