@@ -150,7 +150,7 @@ int main() {
 	glEnableVertexAttribArray(0);
 	
 	unsigned int texture = loadTexture2D("assets/texture.png", GL_LINEAR, GL_MIRRORED_REPEAT, false);
-
+	
 	ourShader.use();
 	ourShader.setInt("texture1", 0);
 	//Render loop
@@ -191,6 +191,7 @@ int main() {
 			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 			unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
 			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+			glBindVertexArray(VAO);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
