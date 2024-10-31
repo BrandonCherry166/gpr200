@@ -41,7 +41,7 @@ glm::vec3 lightColor (1.0f, 1.0f, 1.0f);
 float ambientK = 1.0f;
 float diffuseK = 1.0f;
 float specularK = 0.5f;
-float shine = 500;
+float shine = 500.0f;
 
 float vertices[] = {
 	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 0.0f, -1.0f,
@@ -126,17 +126,17 @@ int main() {
 		return 1;
 	}
 
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init();
+	
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
-	
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init();
 
 	//Initialization goes here!
 	glEnable(GL_DEPTH_TEST);
@@ -186,7 +186,6 @@ int main() {
 		//Create Settings
 		ImGui::Begin("Settings");
 		ImGui::SetWindowSize(ImVec2(400, 300));
-		ImGui::SetWindowFocus("Settings");
 		ImGui::Text("Add Settings Here");
 		ImGui::DragFloat3("Light Position", &lightPos.x, 1.0f);
 		ImGui::ColorEdit3("LightColor", &lightColor.x);
@@ -204,11 +203,6 @@ int main() {
 		lastFrame = currentFrame;
 
 		processInput(window);
-
-		if (ImGui::IsWindowFocused())
-		{
-			std::cout << "Yes";
-		}
 	
 		//Clear Colorbuffer
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -229,6 +223,7 @@ int main() {
 		ourShader.setFloat("DiffuseK", diffuseK);
 		ourShader.setFloat("SpecularK", specularK);
 		ourShader.setFloat("Shininess", shine);
+
 
 		glm::mat4 projection = glm::perspective(glm::radians(cam.zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = cam.GetViewMatrix();
@@ -281,7 +276,8 @@ void processInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS) {
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS) 
+	{
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 	else
