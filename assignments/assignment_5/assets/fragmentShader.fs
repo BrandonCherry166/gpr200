@@ -47,9 +47,11 @@ void main()
 	  vec3 reflectDir = reflect(-lightDir, norm);
       spec = pow(max(dot(viewDir, reflectDir), 0.0), Shininess);
   }
-  vec3 specular = SpecularK * vec3(0.3) * spec;
+  
+  vec3 specular = vec3(0.3) * spec;
 
-  vec4 result = (vec4(ambient,1.0) + vec4(diffuse, 1.0) + vec4(specular,1.0)) * texture(texture1,TexCoord);
+  
+  vec4 result = vec4(ambient + diffuse + specular, 1.0) * texture(texture1,TexCoord);
   // linearly interpolate between both textures
   FragColor = result;
 }

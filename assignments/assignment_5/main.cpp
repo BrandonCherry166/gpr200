@@ -38,9 +38,9 @@ float lastFrame = 0.0f;
 glm::vec3 lightPos(1.2f, 1.0f, -8.0f);
 glm::vec3 lightColor (1.0f, 1.0f, 1.0f);
 
-float ambientK = 0.1f;
-float diffuseK = 0.5f;
-float spectralK = 0.5f;
+float ambientK = 1.0f;
+float diffuseK = 1.0f;
+float specularK = 0.5f;
 float shine = 500;
 
 float vertices[] = {
@@ -193,7 +193,7 @@ int main() {
 
 		ImGui::SliderFloat("AmbientK", &ambientK, 0.0f, 1.0f);
 		ImGui::SliderFloat("DiffuseK", &diffuseK, 0.0f, 1.0f);
-		ImGui::SliderFloat("SpectralK", &spectralK, 0.0f, 1.0f);
+		ImGui::SliderFloat("SpecularK", &specularK, 0.0f, 1.0f);
 		ImGui::SliderFloat("Shininess", &shine, 2.0f, 1024.0f);
 
 		ImGui::End();
@@ -227,7 +227,7 @@ int main() {
 
 		ourShader.setFloat("AmbientK", ambientK);
 		ourShader.setFloat("DiffuseK", diffuseK);
-		ourShader.setFloat("SpectralK", spectralK);
+		ourShader.setFloat("SpecularK", specularK);
 		ourShader.setFloat("Shininess", shine);
 
 		glm::mat4 projection = glm::perspective(glm::radians(cam.zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
